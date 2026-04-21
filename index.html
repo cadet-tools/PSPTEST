@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PŠP Meistarklase</title>
+    <title>PŠP Eksperts</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,14 +14,9 @@
             --error: #ef4444;
             --text: #f8fafc;
             --text-dim: #94a3b8;
-            --accent: #1e293b;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: 'Inter', sans-serif;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
 
         body {
             background-color: var(--bg);
@@ -35,7 +30,7 @@
 
         .app-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             background: var(--card);
             border-radius: 28px;
             padding: 24px;
@@ -43,248 +38,177 @@
             align-self: flex-start;
         }
 
-        /* Progresa josla */
         .progress-bar-bg {
-            height: 8px;
+            height: 6px;
             background: #334155;
             border-radius: 10px;
-            margin: 20px 0 30px 0;
-            overflow: hidden;
+            margin: 15px 0 25px 0;
         }
 
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--primary), #60a5fa);
+            background: var(--primary);
             border-radius: 10px;
-            transition: width 0.4s ease;
+            transition: width 0.3s ease;
         }
 
-        h1 { font-size: 1.4rem; font-weight: 800; margin: 0; color: var(--text); }
-        .step-info { color: var(--text-dim); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+        h1 { font-size: 1.3rem; margin: 0 0 20px 0; font-weight: 800; }
+        .step-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
-        .question-text {
-            font-size: 1.15rem;
-            line-height: 1.4;
-            font-weight: 600;
-            margin-bottom: 24px;
-            min-height: 60px;
-        }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
 
-        .options-container { display: grid; gap: 12px; }
+        .options-container { display: grid; gap: 10px; }
 
         .option-card {
             background: #334155;
             border: 2px solid transparent;
-            border-radius: 18px;
-            padding: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .option-card:active { transform: scale(0.97); }
-        .option-card.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.15); }
-
-        /* Review Sekcija */
-        .review-item {
-            background: #0f172a;
             border-radius: 16px;
             padding: 16px;
-            margin-bottom: 12px;
-            text-align: left;
-            border-left: 4px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
         }
-        .review-item.wrong { border-left-color: var(--error); }
-        .review-item.correct { border-left-color: var(--success); }
-        .review-q { font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
-        .review-a { font-size: 0.85rem; color: var(--text-dim); }
-        .highlight-correct { color: var(--success); font-weight: 600; }
-        .highlight-wrong { color: var(--error); font-weight: 600; text-decoration: line-through; }
+
+        .option-card.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
+
+        .review-item {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            text-align: left;
+            border-left: 4px solid var(--error);
+        }
+        .review-item.is-correct { border-left-color: var(--success); }
+        .review-q { font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; }
+        .review-a { font-size: 0.8rem; }
 
         .btn-action {
             width: 100%;
-            padding: 18px;
-            border-radius: 18px;
+            padding: 16px;
+            border-radius: 16px;
             border: none;
             background: var(--primary);
             color: white;
-            font-size: 1rem;
             font-weight: 700;
+            margin-top: 20px;
             cursor: pointer;
-            margin-top: 24px;
         }
-        .btn-action:disabled { opacity: 0.4; }
+        .btn-action:disabled { opacity: 0.3; }
 
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
-        .stat-box { padding: 16px; border-radius: 18px; background: #334155; text-align: center; }
-        .stat-val { font-size: 1.4rem; font-weight: 800; display: block; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: #334155; padding: 15px; border-radius: 16px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div id="quiz-screen">
-        <span class="step-info" id="step-counter">Jautājums 1 no 3</span>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progress-fill"></div>
-        </div>
-
-        <div id="question-container">
+        <span class="step-label" id="step-counter">Jautājums 1 no 5</span>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+        <div id="q-content">
             <p class="question-text" id="q-text"></p>
             <div class="options-container" id="options-list"></div>
         </div>
-        <button class="btn-action" id="next-btn" onclick="handleNext()" disabled>Turpināt</button>
+        <button class="btn-action" id="next-btn" onclick="nextQuestion()" disabled>Turpināt</button>
     </div>
 
     <div id="result-screen" style="display:none; text-align: center;">
-        <h1>Rezultāti</h1>
+        <h1>Testa Rezultāti</h1>
         <div class="stat-grid">
-            <div class="stat-box">
-                <span class="stat-val" style="color: var(--success);" id="correct-count">0</span>
-                <span class="stat-label">Pareizas</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-val" style="color: var(--error);" id="incorrect-count">0</span>
-                <span class="stat-label">Kļūdas</span>
-            </div>
+            <div class="stat-box"><span id="res-correct" style="color:var(--success); font-weight:800; font-size:1.2rem;">0</span><br><small>Pareizi</small></div>
+            <div class="stat-box"><span id="res-wrong" style="color:var(--error); font-weight:800; font-size:1.2rem;">0</span><br><small>Nepareizi</small></div>
         </div>
-
-        <div id="review-list" style="max-height: 300px; overflow-y: auto; margin-top: 20px;">
-            </div>
-
-        <button class="btn-action" onclick="location.reload()">Mēģināt vēlreiz</button>
+        <div id="review-container" style="max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
+        <button class="btn-action" onclick="location.reload()">Sākt jaunu testu</button>
     </div>
 </div>
 
 <script>
-    // Uzlaboti jautājumi ar saistītiem variantiem
-    const allQuestions = [
-        { 
-            q: "Kādi ir četri PŠP pamatprincipi?", 
-            a: ["Stabila pozīcija, tēmēšana, elpošana, mēlītes nospiediens", "Stabila pozīcija, tēmēšana, aizturi, lēns šāviens", "Ieroča turēšana, tēmēšana, miers, lēnā mēlīte"], 
-            c: 0 
-        },
-        { 
-            q: "Kādam jābūt ķermeņa stāvoklim pēc iekārtošanās pozīcijā?", 
-            a: ["Maksimāli sasprindzinātam stabilitātei", "Atslābinātam un nepiespiestam", "Nedaudz sasprindzinātam tikai plecu zonā"], 
-            c: 1 
-        },
-        { 
-            q: "Kāds ir galvenais stabilitātes pozīcijas mērķis?", 
-            a: ["Pilnībā apturēt ieroča kustību", "Panākt pēc iespējas mazāku ieroča kustību", "Nodrošināt labāku redzamību caur mērķekli"], 
-            c: 1 
-        },
-        { 
-            q: "Kā tiek noteikta dominējošā acs?", 
-            a: ["Aizverot vienu aci un skatoties fokusā", "Ar abu acu trijstūra metodi uz objektu", "Pēc tā, kurai acij ir asāka redze"], 
-            c: 1 
-        },
-        { 
-            q: "Uz ko fokusam jābūt tēmēšanas brīdī?", 
-            a: ["Uz mērķi (tam jābūt skaidram)", "Uz graudu (tam jābūt skaidram)", "Uz mērķekļa apli (tam jābūt skaidram)"], 
-            c: 1 
-        },
-        { 
-            q: "Kur jāatrodas grauda augšai attiecībā pret mērķekli?", 
-            a: ["Mērķekļa centrā", "Mērķekļa apakšējā malā", "Mērķekļa augšējā malā"], 
-            c: 0 
-        },
-        { 
-            q: "Kurā fāzē tiek izdarīts precīzs šāviens?", 
-            a: ["Ieelpas vidū", "Dabīgā elpošanas pauzē pēc izelpas", "Pēc tam, kad elpa aizturēta uz 10 sekundēm"], 
-            c: 1 
-        },
-        { 
-            q: "Cik sekunžu ir optimālā pauze šāviena veikšanai?", 
-            a: ["Aptuveni 1-2 sekundes", "Aptuveni 5-6 sekundes", "Nav ierobežojumu"], 
-            c: 0 
-        },
-        { 
-            q: "Ar kuru rādītājpirksta daļu jānospiež mēlīte?", 
-            a: ["Pirksta vidusdaļu (starp locītavām)", "Pirksta gala vidējo daļu", "Pašu pirksta galu (nagu)"], 
-            c: 1 
-        },
-        { 
-            q: "Kāda ir pareiza mēlītes nospiešanas tehnika?", 
-            a: ["Strauja un pēkšņa", "Lēna un šāvienam jābūt negaidītam", "Spēcīga, lai pārvarētu mehānismu"], 
-            c: 1 
-        }
+    // 20 detalizēti jautājumi no materiāla
+    const database = [
+        { q: "Kāds ir galvenais nosacījums vaiga novietojumam pie laides?", a: ["Tam jābūt cieši piespiestam", "Tam jābūt optimālā attālumā no aizmugurējās tēmēšanas ierīces", "Tam jāatrodas pēc iespējas tuvāk stobram"], c: 1 },
+        { q: "Kas jādara, ja dabiskajā elpošanas pauzē neizdodas veikt šāvienu?", a: ["Jāturpina elpas aizturēšana līdz šāvienam", "Šāviens jāveic nākamajā pauzes brīdī", "Jāveic strauja ieelpa un uzreiz jāšauj"], c: 1 },
+        { q: "Kādu efektu sniedz mēlītes brīvgājiena izspiešana?", a: ["Paātrina lodes lidojumu", "Novērš papildus ieroča kustības šāviena brīdī", "Samazina ieroča atsitienu"], c: 1 },
+        { q: "Kādam jābūt fokusējumam uz mērķēšanas ierīcēm?", a: ["Skaidri jāredz mērķis un mērķeklis", "Skaidri jāredz grauds, bet mērķis nedaudz izplūdis", "Visiem elementiem jābūt vienādi asiem"], c: 1 },
+        { q: "Kas notiek ar ieroci, ja mēlīti nospiež pārāk strauji?", a: ["Tas pakustas uz augšu", "Tas pakustas uz leju", "Tas paliek nekustīgs"], c: 1 },
+        { q: "Kāds ir dominējošās acs noteikšanas galvenais princips?", a: ["Tā ir acs, ar kuru tēmējot objekts neiziet no trijstūra", "Tā ir acs, kura redz objektu lielāku", "Tā ir acs, kuru aizverot objekts paliek vietā"], c: 0 },
+        { q: "Cik fāzes ir mēlītes nospiedienam?", a: ["Viena fāze: šāviens", "Divas fāzes: brīvgājiens un šāviens", "Trīs fāzes: tēmēšana, brīvgājiens, šāviens"], c: 1 },
+        { q: "Kādai jābūt šaušanas pozīcijai attiecībā pret tēmēšanas punktu?", a: ["Ar spēku vērstai pret mērķi", "Nepiespiesti vērstai pret mērķi", "Sāniski vērstai pret mērķi"], c: 1 },
+        { q: "Kāds ir dabiskās elpošanas pauzes aptuvenais ilgums?", a: ["1-2 sekundes", "5-8 sekundes", "Puse sekundes"], c: 0 },
+        { q: "Kur tieši uz rādītājpirksta jāatrodas mēlītei?", a: ["Uz pirmās locītavas", "Uz pirksta gala vidējās daļas", "Uz pirksta paša galiņa"], c: 1 },
+        { q: "Kāpēc svarīgs muskuļu atslābums stabilā pozīcijā?", a: ["Lai mazinātu ieroča atsitienu", "Lai ierocis veiktu pēc iespējas mazāku kustību", "Lai varētu šaut ātrāk"], c: 1 },
+        { q: "Kā jārīkojas pēc tam, kad panākta skaidra tēmēšanas līnija?", a: ["Jāveic korekcija ar ķermeni", "Galvu vairs nekustina, tēmē un šauj", "Jāpārbauda tēmēklis vēlreiz"], c: 1 },
+        { q: "Kuru elementu NEIETVER stabila šaušanas pozīcija pēc materiāla?", a: ["Pistoļveida roktura satvēriens", "Kāju novietojums 45 grādos", "Vaiga novietojums pie laides"], c: 1 },
+        { q: "Kas jādara, lai savietotu mērķēšanas ierīces?", a: ["Jānovieto grauda gals mērķekļa centrā", "Jāskatās tikai uz mērķi caur mērķekli", "Jānovieto mērķeklis grauda augšpusē"], c: 0 },
+        { q: "Kādai jābūt mēlītes nospiešanas kustībai?", a: ["Ātrai un kontrolētai", "Lēnai un šāvienam jābūt negaidītam", "Pakāpeniskai ar pauzi vidū"], c: 1 },
+        { q: "Kas palīdz centrēt objektu mērķekļa aplī?", a: ["Acs dabiskā īpašība tiekties pēc lielākā gaismas daudzuma", "Speciāls ieroča optiskais pārklājums", "Ciešs satvēriens ar abām rokām"], c: 0 },
+        { q: "Kāds elements palīdz izveidot tēmēšanas līniju?", a: ["Acs - tēmēšanas ierīces - mērķis", "Acs - laide - stobrs", "Mērķis - grauds - plecs"], c: 0 },
+        { q: "Kāda ir pareizā secība elpošanas kontrolei?", a: ["Ieelpa -> Šāviens -> Izelpa", "Ieelpa -> Izelpa -> Pauze/Šāviens", "Izelpa -> Ieelpa -> Pauze/Šāviens"], c: 1 },
+        { q: "Ko ietver tēmēšana saskaņā ar PŠP?", a: ["Tikai mērķa atrašanu", "Dominējošo aci, fokusu un ierīču savietošanu", "Ieroča ieplecošanu un acs fokusu"], c: 1 },
+        { q: "Kādam jābūt rokas satvērienam pie pastobres?", a: ["Cieši sasprindzinātam", "Nepiespiestam kā daļai no stabilas pozīcijas", "Tikpat stingram kā pistoļveida rokturim"], c: 1 }
     ];
 
-    let currentStep = 0;
+    let currentQ = 0;
     let score = 0;
-    let userAnswers = [];
-    const totalSteps = 3;
-    const quizQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, totalSteps);
+    let userChoices = [];
+    const testSize = 5; // Cik jautājumus uzdot vienā reizē
+    const activeQuestions = database.sort(() => 0.5 - Math.random()).slice(0, testSize);
 
-    function initStep() {
-        const q = quizQuestions[currentStep];
-        document.getElementById('next-btn').disabled = true;
-        
-        const progress = (currentStep / totalSteps) * 100;
-        document.getElementById('progress-fill').style.width = `${progress}%`;
-        document.getElementById('step-counter').innerText = `Jautājums ${currentStep + 1} no ${totalSteps}`;
-
+    function renderQuestion() {
+        const q = activeQuestions[currentQ];
+        document.getElementById('step-counter').innerText = `Jautājums ${currentQ + 1} no ${testSize}`;
+        document.getElementById('progress-fill').style.width = `${(currentQ / testSize) * 100}%`;
         document.getElementById('q-text').innerText = q.q;
+        
         const list = document.getElementById('options-list');
         list.innerHTML = '';
-
-        q.a.forEach((opt, i) => {
-            const div = document.createElement('div');
-            div.className = 'option-card';
-            div.innerText = opt;
-            div.onclick = () => {
+        q.a.forEach((alt, i) => {
+            const card = document.createElement('div');
+            card.className = 'option-card';
+            card.innerText = alt;
+            card.onclick = () => {
                 document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-                div.classList.add('selected');
-                userAnswers[currentStep] = i;
+                card.classList.add('selected');
+                userChoices[currentQ] = i;
                 document.getElementById('next-btn').disabled = false;
             };
-            list.appendChild(div);
+            list.appendChild(card);
         });
+        document.getElementById('next-btn').disabled = true;
     }
 
-    function handleNext() {
-        if (userAnswers[currentStep] === quizQuestions[currentStep].c) score++;
-        
-        currentStep++;
-        if (currentStep < totalSteps) {
-            initStep();
-        } else {
-            showResults();
-        }
+    function nextQuestion() {
+        if (userChoices[currentQ] === activeQuestions[currentQ].c) score++;
+        currentQ++;
+        if (currentQ < testSize) renderQuestion();
+        else showResults();
     }
 
     function showResults() {
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('progress-fill').style.width = `100%`;
-        
-        document.getElementById('correct-count').innerText = score;
-        document.getElementById('incorrect-count').innerText = totalSteps - score;
+        document.getElementById('res-correct').innerText = score;
+        document.getElementById('res-wrong').innerText = testSize - score;
 
-        const reviewList = document.getElementById('review-list');
-        reviewList.innerHTML = '<p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:15px;">KĻŪDU ANALĪZE</p>';
-
-        quizQuestions.forEach((q, i) => {
-            const isCorrect = userAnswers[i] === q.c;
-            const item = document.createElement('div');
-            item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
-            
-            let answerFeedback = isCorrect 
-                ? `<span class="highlight-correct">${q.a[q.c]}</span>`
-                : `<span class="highlight-wrong">${q.a[userAnswers[i]]}</span><br>Pareizi: <span class="highlight-correct">${q.a[q.c]}</span>`;
-
-            item.innerHTML = `
+        const container = document.getElementById('review-container');
+        activeQuestions.forEach((q, i) => {
+            const correct = userChoices[i] === q.c;
+            const div = document.createElement('div');
+            div.className = `review-item ${correct ? 'is-correct' : ''}`;
+            div.innerHTML = `
                 <div class="review-q">${i+1}. ${q.q}</div>
-                <div class="review-a">${answerFeedback}</div>
+                <div class="review-a">
+                    ${correct ? '✅ ' : '❌ Jūsu: ' + q.a[userChoices[i]] + '<br>'}
+                    <strong>Pareizi: ${q.a[q.c]}</strong>
+                </div>
             `;
-            reviewList.appendChild(item);
+            container.appendChild(div);
         });
     }
 
-    initStep();
+    renderQuestion();
 </script>
 
 </body>
